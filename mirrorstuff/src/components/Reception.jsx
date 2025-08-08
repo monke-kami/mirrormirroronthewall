@@ -4,24 +4,24 @@ import Notepad from './Notepad'
 import './Reception.css'
 import ApiService from '../services/api'
 
-const Reception = () => {
+const Reception = ({ onLoginSuccess }) => {
   const [showNotepad, setShowNotepad] = useState(false)
+  const [error, setError] = useState('')
 
   const handleNotepadClick = () => {
     setShowNotepad(true)
   }
 
-  const [error, setError] = useState('')
-
-  const handleNotepadSubmit = async (credentials) => {
-    setError('')
-    try {
-      const response = await ApiService.login(credentials)
-      alert(`Welcome, Dr. ${response.user.username}! Session starting...`)
-      setShowNotepad(false)
-    } catch (err) {
-      setError(err.message || 'Login failed. Please try again.')
-    }
+  const handleNotepadSubmit = async (user) => {
+    console.log('Therapist authenticated:', user)
+    setShowNotepad(false)
+    
+    // Wait a moment for visual feedback
+    setTimeout(() => {
+      if (onLoginSuccess) {
+        onLoginSuccess(user)
+      }
+    }, 500)
   }
 
   const handleNotepadClose = () => {

@@ -3,16 +3,30 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
+const fs = require('fs');
+
 const authRoutes = require('./routes/auth');
+const avatarRoutes = require('./routes/avatar');
+const therapyRoutes = require('./routes/therapy');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads', 'avatars');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/avatars', avatarRoutes);
+app.use('/api/therapy', therapyRoutes);
 
 // MongoDB connection
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/mirrorlogin';

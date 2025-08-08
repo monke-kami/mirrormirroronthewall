@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-dark-purple via-deep-blue to-black text-white;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .neon-border {
+    @apply border-2 border-neon-cyan shadow-lg;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  }
+  
+  .neon-text {
+    @apply text-neon-cyan;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  }
+  
+  .glass-card {
+    @apply bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-lg;
+  }
+  
+  .chat-bubble-user {
+    @apply bg-gradient-to-r from-neon-cyan to-blue-400 text-black rounded-2xl px-4 py-2 max-w-xs ml-auto;
+  }
+  
+  .chat-bubble-ai {
+    @apply bg-gradient-to-r from-neon-pink to-purple-400 text-white rounded-2xl px-4 py-2 max-w-xs mr-auto;
+  }
+  
+  .upload-zone {
+    @apply border-2 border-dashed border-neon-cyan border-opacity-50 rounded-lg p-8 text-center transition-all duration-300 hover:border-opacity-100 hover:bg-neon-cyan hover:bg-opacity-5;
+  }
+  
+  .deepfake-container {
+    @apply relative rounded-lg overflow-hidden;
+    background: linear-gradient(45deg, #00FFFF, #FF1493, #00FFFF);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
