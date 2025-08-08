@@ -3,10 +3,12 @@ import './App.css'
 import Notepad from './components/Notepad'
 import NotepadIcon from './components/NotepadIcon'
 import Reception from './components/Reception'
+import ApiService from './services/api'
 
 function App() {
   const [showNotepad, setShowNotepad] = useState(false)
   const [currentView, setCurrentView] = useState('reception') // 'reception' or 'original'
+  const [authenticatedUser, setAuthenticatedUser] = useState(null)
 
   const handleNotepadClick = () => {
     setShowNotepad(true)
@@ -16,9 +18,10 @@ function App() {
     setShowNotepad(false)
   }
 
-  const handleSubmit = (credentials) => {
-    console.log('Credentials submitted:', credentials)
-    alert(`Welcome, Dr. ${credentials.username}! Session starting...`)
+  const handleSubmit = (user) => {
+    console.log('User authenticated:', user)
+    setAuthenticatedUser(user)
+    alert(`Welcome, Dr. ${user.username}! Session starting...`)
     setShowNotepad(false)
   }
 

@@ -1,6 +1,8 @@
+
 import { useState } from 'react'
 import Notepad from './Notepad'
 import './Reception.css'
+import ApiService from '../services/api'
 
 const Reception = () => {
   const [showNotepad, setShowNotepad] = useState(false)
@@ -9,10 +11,17 @@ const Reception = () => {
     setShowNotepad(true)
   }
 
-  const handleNotepadSubmit = (credentials) => {
-    console.log('Therapist credentials:', credentials)
-    alert(`Welcome, Dr. ${credentials.username}! Session starting...`)
-    setShowNotepad(false)
+  const [error, setError] = useState('')
+
+  const handleNotepadSubmit = async (credentials) => {
+    setError('')
+    try {
+      const response = await ApiService.login(credentials)
+      alert(`Welcome, Dr. ${response.user.username}! Session starting...`)
+      setShowNotepad(false)
+    } catch (err) {
+      setError(err.message || 'Login failed. Please try again.')
+    }
   }
 
   const handleNotepadClose = () => {
@@ -37,6 +46,7 @@ const Reception = () => {
         onSubmit={handleNotepadSubmit}
         onClose={handleNotepadClose}
       />
+      {error && <div style={{color: 'red', textAlign: 'center', marginTop: 10}}>{error}</div>}
     </div>
   )
 }

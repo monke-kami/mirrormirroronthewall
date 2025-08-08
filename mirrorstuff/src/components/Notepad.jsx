@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './Notepad.css'
+import ApiService from '../services/api'
 
 const Notepad = ({ onSubmit, onClose, isVisible = true }) => {
   const [credentials, setCredentials] = useState({
@@ -7,6 +8,8 @@ const Notepad = ({ onSubmit, onClose, isVisible = true }) => {
     password: '',
     license: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleInputChange = (e) => {
     setCredentials({
@@ -15,14 +18,27 @@ const Notepad = ({ onSubmit, onClose, isVisible = true }) => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSubmit?.(credentials)
-    setCredentials({ username: '', password: '', license: '' })
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const response = await ApiService.login(credentials)
+      console.log('Login successful:', response)
+      onSubmit?.(response.user)
+      setCredentials({ username: '', password: '', license: '' })
+    } catch (error) {
+      console.error('Login failed:', error)
+      setError(error.message || 'Login failed. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleClose = () => {
     setCredentials({ username: '', password: '', license: '' })
+    setError('')
     onClose?.()
   }
 
@@ -34,6 +50,7 @@ const Notepad = ({ onSubmit, onClose, isVisible = true }) => {
         <button className="close-btn" onClick={handleClose}>&times;</button>
         <div className="credential-form">
           <div className="form-title">THERAPIST SIGN-IN</div>
+          {error && <div className="error-message" style={{color: 'red', marginBottom: '10px', textAlign: 'center'}}>{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="username">DR. NAME:</label>
@@ -71,7 +88,9 @@ const Notepad = ({ onSubmit, onClose, isVisible = true }) => {
                 required 
               />
             </div>
-            <button type="submit" className="submit-btn">Begin Session</button>
+            <button type="submit" className="submit-btn" disabled={isLoading}>
+              {isLoading ? 'Signing In...' : 'Begin Session'}
+            </button>
           </form>
         </div>
       </div>
