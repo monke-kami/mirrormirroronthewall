@@ -12,6 +12,8 @@ from datetime import datetime
 from typing import Dict, Any
 import json
 
+from app.services.auth_service import optional_auth, token_required
+
 
 def create_routes(app, roast_service, face_service, avatar_service):
     """Create all API routes for the therapy app"""
@@ -44,7 +46,8 @@ def create_routes(app, roast_service, face_service, avatar_service):
     
     # 📷 SELFIE UPLOAD & PROCESSING
     @app.route('/api/upload-selfie', methods=['POST'])
-    def upload_selfie():
+    @optional_auth
+    def upload_selfie(current_user):
         """Upload and process user selfie for avatar generation"""
         
         try:
@@ -79,11 +82,17 @@ def create_routes(app, roast_service, face_service, avatar_service):
             if result.get('error'):
                 return jsonify(result), 400
             
+            # Add user information if authenticated
+            if current_user:
+                result['user_id'] = current_user.user_id
+                result['username'] = current_user.username
+            
             return jsonify({
                 "success": True,
                 "message": "Selfie processed successfully! Face detected and ready for therapeutic mockery.",
                 "data": result,
-                "next_step": "Generate avatar using the file_id"
+                "next_step": "Generate avatar using the file_id",
+                "user_status": "authenticated" if current_user else "guest"
             })
             
         except Exception as e:

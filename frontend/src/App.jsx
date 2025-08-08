@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 // import './App.css'  // Temporarily disabled
+import { AuthProvider } from './contexts/AuthContext'
 import Header from './components/Header'
 import SelfieUpload from './components/SelfieUpload'
 import AvatarGenerator from './components/AvatarGenerator'
@@ -55,94 +56,75 @@ function App() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5', fontFamily: 'Arial, sans-serif' }}>
-      <Header currentStage={currentStage} />
-      
-      <main style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-        {error && (
+    <AuthProvider>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+        <Header currentStage={currentStage} />
+        
+        <main style={{ padding: '2rem' }}>
+          {error && (
+            <div style={{ 
+              backgroundColor: '#ff6b6b', 
+              color: 'white', 
+              padding: '1rem', 
+              borderRadius: '8px', 
+              marginBottom: '1rem',
+              textAlign: 'center'
+            }}>
+              {error}
+            </div>
+          )}
+
+          {/* Stage-specific content */}
+          {currentStage === STAGES.UPLOAD && (
+            <div>
+              <SelfieUpload onSelfieUploaded={handleSelfieUploaded} />
+            </div>
+          )}
+
+          {currentStage === STAGES.GENERATE && uploadedFile && (
+            <div>
+              <TherapyModeSelector 
+                selectedMode={therapyMode}
+                onModeChange={setTherapyMode}
+              />
+              <AvatarGenerator 
+                uploadedFile={uploadedFile}
+                therapyMode={therapyMode}
+                onAvatarGenerated={handleAvatarGenerated}
+                onGoBack={goBack}
+              />
+            </div>
+          )}
+
+          {currentStage === STAGES.THERAPY && generatedAvatar && (
+            <div>
+              <TherapySession 
+                avatar={generatedAvatar}
+                therapyMode={therapyMode}
+                onStartOver={startOver}
+                onGoBack={goBack}
+              />
+            </div>
+          )}
+
+          {/* Footer with disclaimer */}
           <div style={{ 
-            backgroundColor: '#fee', 
-            color: '#c33', 
+            marginTop: '2rem', 
+            textAlign: 'center', 
             padding: '1rem', 
-            borderRadius: '8px', 
-            marginBottom: '2rem',
-            border: '1px solid #fcc'
+            backgroundColor: 'white', 
+            borderRadius: '8px',
+            border: '1px solid #ddd'
           }}>
-            <strong>Oops!</strong> {error}
-            <button 
-              onClick={() => setError(null)} 
-              style={{
-                marginLeft: '1rem', 
-                padding: '0.5rem 1rem', 
-                backgroundColor: '#ddd', 
-                border: 'none', 
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              Dismiss
-            </button>
+            <p style={{color: '#666', fontStyle: 'italic', margin: 0}}>
+              <strong>Disclaimer:</strong> This is not actual therapy. For real mental health support, 
+              please consult licensed professionals. This app is for entertainment purposes only and 
+              may cause existential questioning about talking to yourself.
+            </p>
           </div>
-        )}
-
-        {currentStage === STAGES.UPLOAD && (
-          <div>
-            <SelfieUpload 
-              onSelfieUploaded={handleSelfieUploaded}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              setError={setError}
-            />
-          </div>
-        )}
-
-        {currentStage === STAGES.GENERATE && (
-          <div>
-            <TherapyModeSelector 
-              selectedMode={therapyMode}
-              onModeChange={setTherapyMode}
-            />
-            <AvatarGenerator
-              uploadedFile={uploadedFile}
-              therapyMode={therapyMode}
-              onAvatarGenerated={handleAvatarGenerated}
-              onBack={goBack}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              setError={setError}
-            />
-          </div>
-        )}
-
-        {currentStage === STAGES.THERAPY && (
-          <div>
-            <TherapySession
-              avatar={generatedAvatar}
-              therapyMode={therapyMode}
-              onBack={goBack}
-              onStartOver={startOver}
-              setError={setError}
-            />
-          </div>
-        )}
-
-        {/* Footer with disclaimer */}
-        <div style={{ 
-          marginTop: '2rem', 
-          textAlign: 'center', 
-          padding: '1rem', 
-          backgroundColor: 'white', 
-          borderRadius: '8px',
-          border: '1px solid #ddd'
-        }}>
-          <p style={{color: '#666', fontStyle: 'italic', margin: 0}}>
-            <strong>Disclaimer:</strong> This is not actual therapy. For real mental health support, 
-            please consult licensed professionals. This app is for entertainment purposes only and 
-            may cause existential questioning about talking to yourself.
-          </p>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </AuthProvider>
   )
 }
 

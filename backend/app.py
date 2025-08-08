@@ -30,6 +30,7 @@ def create_app():
     app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))  # 16MB
     app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', '../uploads')
     app.config['AVATAR_FOLDER'] = os.getenv('AVATAR_FOLDER', '../generated_avatars')
+    app.config['DATA_FOLDER'] = os.getenv('DATA_FOLDER', './data')
     
     # Enable CORS for frontend
     CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000"], supports_credentials=True)
@@ -45,10 +46,14 @@ def create_app():
     # Create upload directories
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     os.makedirs(app.config['AVATAR_FOLDER'], exist_ok=True)
+    os.makedirs(app.config['DATA_FOLDER'], exist_ok=True)
     
     # Routes
     from app.api.routes import create_routes
+    from app.api.auth_routes import create_auth_routes
+    
     create_routes(app, roast_service, face_service, avatar_service)
+    create_auth_routes(app)
     
     # WebSocket events for real-time therapy
     @socketio.on('start_therapy_session')

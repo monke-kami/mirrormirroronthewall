@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Mirror Mirror Authentication Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.3);
+        }
+        button {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #4ecdc4;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+        .success {
+            border-left-color: #51cf66;
+            background: rgba(81, 207, 102, 0.1);
+        }
+        .user-info {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖🪞 Mirror Mirror Authentication Test</h1>
+        <p style="text-align: center; opacity: 0.8;">
+            Testing the authentication system for therapeutic disappointment since 2025!
+        </p>
+
+        <!-- Registration Section -->
+        <div class="test-section">
+            <h2>🎭 User Registration</h2>
+            <div class="form-group">
+                <label for="regUsername">Username:</label>
+                <input type="text" id="regUsername" placeholder="Your therapeutic username">
+            </div>
+            <div class="form-group">
+                <label for="regEmail">Email:</label>
+                <input type="email" id="regEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="regPassword">Password:</label>
+                <input type="password" id="regPassword" placeholder="At least 8 characters">
+            </div>
+            <button onclick="testRegister()">🚀 Register User</button>
+            <div id="registerResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Login Section -->
+        <div class="test-section">
+            <h2>🔑 User Login</h2>
+            <div class="form-group">
+                <label for="loginUsername">Username or Email:</label>
+                <input type="text" id="loginUsername" placeholder="Username or email">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" placeholder="Your password">
+            </div>
+            <button onclick="testLogin()">🚪 Login</button>
+            <button onclick="testVerifyToken()" id="verifyBtn" disabled>✅ Verify Token</button>
+            <button onclick="testLogout()" id="logoutBtn" disabled>🚪 Logout</button>
+            <div id="loginResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="test-section">
+            <h2>👤 Profile Management</h2>
+            <button onclick="testGetProfile()" id="profileBtn" disabled>📋 Get Profile</button>
+            <button onclick="testUpdateProfile()" id="updateProfileBtn" disabled>💾 Update Profile</button>
+            <div id="profileResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Current User Info -->
+        <div id="userInfo" class="user-info" style="display: none;">
+            <h3>🧑‍💻 Current User Info</h3>
+            <div id="userDetails"></div>
+        </div>
+
+        <!-- API Test Section -->
+        <div class="test-section">
+            <h2>🔧 API Endpoints Test</h2>
+            <button onclick="testHealthCheck()">❤️ Health Check</button>
+            <button onclick="testHome()">🏠 Home Endpoint</button>
+            <button onclick="testUpload()">📷 Test Upload</button>
+            <div id="apiResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+
+        const API_BASE = 'http://localhost:5000/api';
+
+        // Update UI based on auth state
+        function updateAuthUI() {
+            const isAuthenticated = !!(authToken && currentUser);
+            
+            document.getElementById('verifyBtn').disabled = !isAuthenticated;
+            document.getElementById('logoutBtn').disabled = !isAuthenticated;
+            document.getElementById('profileBtn').disabled = !isAuthenticated;
+            document.getElementById('updateProfileBtn').disabled = !isAuthenticated;
+            
+            const userInfo = document.getElementById('userInfo');
+            const userDetails = document.getElementById('userDetails');
+            
+            if (isAuthenticated) {
+                userInfo.style.display = 'block';
+                userDetails.innerHTML = `
+                    <strong>Username:</strong> ${currentUser.username}<br>
+                    <strong>Email:</strong> ${currentUser.email}<br>
+                    <strong>User ID:</strong> ${currentUser.user_id}<br>
+                    <strong>Joined:</strong> ${new Date(currentUser.created_at).toLocaleString()}<br>
+                    <strong>Token:</strong> ${authToken.substring(0, 50)}...
+                `;
+            } else {
+                userInfo.style.display = 'none';
+            }
+        }
+
+        // Make authenticated request
+        async function makeRequest(url, options = {}) {
+            if (authToken) {
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${authToken}`
+                };
+            }
+            
+            const response = await fetch(url, options);
+            const data = await response.json();
+            
+            return { response, data };
+        }
+
+        // Show result
+        function showResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.textContent = JSON.stringify(data, null, 2);
+            element.className = `result ${isError ? 'error' : 'success'}`;
+        }
+
+        // Test registration
+        async function testRegister() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            if (!username || !email || !password) {
+                showResult('registerResult', { error: 'Please fill all fields' }, true);
+                return;
+            }
+
+            try {
+                const { response, data } = await makeRequest(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                showResult('registerResult', data, !response.ok);
+
+                if (response.ok && data.success) {
+                    authToken = data.data.token;
+                    currentUser = data.data.user;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                }
+            } catch (error) {
+                showResult('registerResult', { error: error.message }, true);
+            }
+        }
+
+        // Test login
+        async function testLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                showResult('loginResult', { error: 'Please fill all fields' }, true);
+                return;
+            }
+
+            try {
+                const { response, data } = await makeRequest(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                showResult('loginResult', data, !response.ok);
+
+                if (response.ok && data.success) {
+                    authToken = data.data.token;
+                    currentUser = data.data.user;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                }
+            } catch (error) {
+                showResult('loginResult', { error: error.message }, true);
+            }
+        }
+
+        // Test token verification
+        async function testVerifyToken() {
+            try {
+                const { response, data } = await makeRequest(`${API_BASE}/auth/verify`);
+                showResult('loginResult', data, !response.ok);
+            } catch (error) {
+                showResult('loginResult', { error: error.message }, true);
+            }
+        }
+
+        // Test logout
+        async function testLogout() {
+            try {
+                const { response, data } = await makeRequest(`${API_BASE}/auth/logout`, {
+                    method: 'POST'
+                });
+                
+                showResult('loginResult', data, !response.ok);
+                
+                // Clear local storage
+                authToken = null;
+                currentUser = null;
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
+                updateAuthUI();
+            } catch (error) {
+                showResult('loginResult', { error: error.message }, true);
+            }
+        }
+
+        // Test get profile
+        async function testGetProfile() {
+            try {
+                const { response, data } = await makeRequest(`${API_BASE}/auth/profile`);
+                showResult('profileResult', data, !response.ok);
+            } catch (error) {
+                showResult('profileResult', { error: error.message }, true);
+            }
+        }
+
+        // Test update profile
+        async function testUpdateProfile() {
+            const profileData = {
+                bio: "Testing therapeutic profile updates since 2025!",
+                therapy_style: "roast_therapy",
+                roast_level: "well_done",
+                preferences: {
+                    notifications: true,
+                    theme: "dark"
+                }
+            };
+
+            try {
+                const { response, data } = await makeRequest(`${API_BASE}/auth/profile`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profileData)
+                });
+
+                showResult('profileResult', data, !response.ok);
+
+                if (response.ok && data.success) {
+                    currentUser = data.data;
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                }
+            } catch (error) {
+                showResult('profileResult', { error: error.message }, true);
+            }
+        }
+
+        // Test health check
+        async function testHealthCheck() {
+            try {
+                const { response, data } = await makeRequest('http://localhost:5000/api/health');
+                showResult('apiResult', data, !response.ok);
+            } catch (error) {
+                showResult('apiResult', { error: error.message }, true);
+            }
+        }
+
+        // Test home endpoint
+        async function testHome() {
+            try {
+                const { response, data } = await makeRequest('http://localhost:5000/');
+                showResult('apiResult', data, !response.ok);
+            } catch (error) {
+                showResult('apiResult', { error: error.message }, true);
+            }
+        }
+
+        // Test upload endpoint
+        async function testUpload() {
+            try {
+                const { response, data } = await makeRequest('http://localhost:5000/api/upload-selfie', {
+                    method: 'POST'
+                });
+                showResult('apiResult', data, !response.ok);
+            } catch (error) {
+                showResult('apiResult', { error: error.message }, true);
+            }
+        }
+
+        // Initialize UI
+        updateAuthUI();
+    </script>
+</body>
+</html>
