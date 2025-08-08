@@ -1,0 +1,95 @@
+/* 🤖🪞 App Component Styles */
+
+.header {
+  background: linear-gradient(135deg, var(--therapy-primary) 0%, var(--therapy-secondary) 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header .subtitle {
+  color: var(--therapy-light);
+  font-style: italic;
+  opacity: 0.9;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.stage-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.stage.active {
+  background: var(--therapy-accent);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.stage.completed {
+  background: var(--therapy-success);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.stage-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  color: var(--therapy-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.stage.active .stage-number {
+  background: white;
+  color: var(--therapy-accent);
+}
+
+.stage.completed .stage-number {
+  background: white;
+  color: var(--therapy-success);
+}
