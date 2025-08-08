@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  background-color: #2B2B2B;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* View switcher */
+.view-switcher {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 2000;
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.view-switcher button {
+  padding: 8px 16px;
+  border: 2px solid #2F4F4F;
+  background: white;
+  color: #2F4F4F;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.view-switcher button:hover {
+  background: #f0f0f0;
+}
+
+.view-switcher button.active {
+  background: #2F4F4F;
+  color: white;
+}
+
+.reception-scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url('/reception.png') center/cover no-repeat;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Clickable notepad area - positioned based on where it appears in reception.png */
+.notepad-clickable {
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 60px;
+}
+
+/* Pixel-perfect rendering */
+* {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}

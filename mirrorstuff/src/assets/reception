@@ -1,0 +1,329 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8-bit Therapist Reception</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #d9b28c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+  }
+  .scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url('reception.png') center/contain no-repeat;
+    image-rendering: pixelated;
+    transition: transform 0.6s ease-in-out;
+  }
+  .notepad {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 60px;
+    cursor: pointer;
+    background: rgba(255, 255, 0, 0.1);
+    border: 2px solid rgba(255, 255, 0, 0);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  .notepad:hover {
+    background: rgba(255, 255, 0, 0.2);
+    border: 2px solid rgba(255, 255, 0, 0.5);
+    transform: translateX(-50%) scale(1.05);
+  }
+  
+  /* Notepad overlay when clicked */
+  .notepad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .notepad-overlay.visible {
+    display: flex;
+  }
+  
+  .notepad-container {
+    position: relative;
+    width: 480px;
+    height: 600px;
+    background: #f8f6e8;
+    border: 4px solid #2a2a2a;
+    border-radius: 0;
+    box-shadow: 
+      inset 2px 2px 0 #ffffff,
+      inset -2px -2px 0 #808080,
+      4px 4px 0 #000000;
+    image-rendering: pixelated;
+    transform: perspective(600px) rotateX(-5deg);
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+  }
+  
+  /* Add notebook spiral binding */
+  .notepad-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 8px;
+    height: 100%;
+    background: repeating-linear-gradient(
+      to bottom,
+      #d4d4d4 0px,
+      #d4d4d4 30px,
+      #b8b8b8 30px,
+      #b8b8b8 32px
+    );
+    border-left: 2px solid #999;
+    border-right: 2px solid #999;
+  }
+  
+  /* Add ruled lines */
+  .notepad-container::after {
+    content: '';
+    position: absolute;
+    top: 80px;
+    left: 40px;
+    right: 20px;
+    bottom: 20px;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 28px,
+      #b3d9ff 28px,
+      #b3d9ff 30px
+    );
+    pointer-events: none;
+  }
+  
+  /* Form overlay on top of notepad image */
+  .credential-form {
+    position: absolute;
+    top: 15%;
+    left: 50px;
+    right: 30px;
+    bottom: 10%;
+    padding: 25px 20px;
+    background: transparent;
+    border-radius: 0;
+    z-index: 10;
+  }
+  
+  .form-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin-bottom: 30px;
+    text-shadow: none;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    text-decoration: underline;
+    text-decoration-color: #1a1a1a;
+    text-underline-offset: 4px;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+    position: relative;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px 8px;
+    border: none;
+    border-bottom: 3px solid #1a1a1a;
+    background: transparent;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    outline: none;
+    border-radius: 0;
+    box-sizing: border-box;
+    color: #1a1a1a;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  .form-group input:focus {
+    border-bottom-color: #0066cc;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .form-group input::placeholder {
+    color: #666;
+    font-style: italic;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    background: #1a1a1a;
+    color: #ffffff;
+    border: 4px outset #666666;
+    padding: 14px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0;
+    margin-top: 20px;
+    transition: all 0.1s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0 #000000;
+  }
+  
+  .submit-btn:hover {
+    background: #333333;
+    border-style: inset;
+  }
+  
+  .submit-btn:active {
+    background: #0a0a0a;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.5);
+    transform: translate(1px, 1px);
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: #c0c0c0;
+    border: 3px outset #c0c0c0;
+    width: 36px;
+    height: 36px;
+    border-radius: 0;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-family: 'Courier New', monospace;
+    box-shadow: 2px 2px 0 #808080;
+    z-index: 20;
+  }
+  
+  .close-btn:hover {
+    background: #d0d0d0;
+    border-style: inset;
+  }
+  
+  .close-btn:active {
+    background: #a0a0a0;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.5);
+    transform: translate(1px, 1px);
+  }
+</style>
+</head>
+<body>
+  <div class="scene" id="scene">
+    <div class="notepad" id="notepad"></div>
+  </div>
+
+  <!-- Notepad overlay -->
+  <div class="notepad-overlay" id="notepadOverlay">
+    <div class="notepad-container">
+      <button class="close-btn" id="closeBtn">&times;</button>
+      <div class="credential-form">
+        <div class="form-title">THERAPIST SIGN-IN</div>
+        <form id="credentialForm">
+          <div class="form-group">
+            <label for="username">DR. NAME:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your name..." required>
+          </div>
+          <div class="form-group">
+            <label for="password">PASSWORD:</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required>
+          </div>
+          <div class="form-group">
+            <label for="license">LICENSE #:</label>
+            <input type="text" id="license" name="license" placeholder="e.g. PSY12345" required>
+          </div>
+          <button type="submit" class="submit-btn">Begin Session</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const scene = document.getElementById('scene');
+  const notepad = document.getElementById('notepad');
+  const notepadOverlay = document.getElementById('notepadOverlay');
+  const closeBtn = document.getElementById('closeBtn');
+  const credentialForm = document.getElementById('credentialForm');
+
+  // Show notepad form when clicking the notepad
+  notepad.addEventListener('click', (e) => {
+    e.stopPropagation();
+    notepadOverlay.classList.add('visible');
+  });
+
+  // Close notepad when clicking the close button
+  closeBtn.addEventListener('click', () => {
+    notepadOverlay.classList.remove('visible');
+    credentialForm.reset();
+  });
+
+  // Close notepad when clicking outside the form
+  notepadOverlay.addEventListener('click', (e) => {
+    if (e.target === notepadOverlay) {
+      notepadOverlay.classList.remove('visible');
+      credentialForm.reset();
+    }
+  });
+
+  // Handle form submission
+  credentialForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(credentialForm);
+    const credentials = {
+      username: formData.get('username'),
+      password: formData.get('password'),
+      license: formData.get('license')
+    };
+    
+    console.log('Therapist credentials:', credentials);
+    alert(`Welcome, Dr. ${credentials.username}! Session starting...`);
+    
+    notepadOverlay.classList.remove('visible');
+    credentialForm.reset();
+  });
+
+  // Close notepad with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && notepadOverlay.classList.contains('visible')) {
+      notepadOverlay.classList.remove('visible');
+      credentialForm.reset();
+    }
+  });
+</script>
+</body>
+</html>

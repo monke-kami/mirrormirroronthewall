@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8-bit Therapist Reception</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #2B2B2B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .reception-scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('public/reception.png') center/cover no-repeat;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Clickable notepad area - positioned based on where it appears in reception.png */
+  .notepad-clickable {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 60px;
+    cursor: pointer;
+    background: rgba(255, 255, 0, 0.1);
+    border: 2px solid rgba(255, 255, 0, 0);
+    transition: all 0.3s ease;
+  }
+  
+  .notepad-clickable:hover {
+    background: rgba(255, 255, 0, 0.2);
+    border: 2px solid rgba(255, 255, 0, 0.5);
+    transform: translateX(-50%) scale(1.05);
+  }
+  
+  /* Notepad overlay when clicked */
+  .notepad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .notepad-container {
+    position: relative;
+    width: 400px;
+    height: 500px;
+    background: #f5f5dc;
+    border: 3px solid #8b4513;
+    border-radius: 8px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    transform: perspective(600px) rotateX(-5deg);
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+  }
+  
+  /* Form overlay on top of notepad image */
+  .credential-form {
+    position: absolute;
+    top: 20%;
+    left: 15%;
+    right: 15%;
+    bottom: 15%;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+  }
+  
+  .form-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2F4F4F;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #2F4F4F;
+    font-size: 12px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #2F4F4F;
+    background: rgba(255, 255, 255, 0.9);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    outline: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus {
+    border-color: #4A90E2;
+    background: white;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    background: #2F4F4F;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background: #1C3A3A;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-weight: bold;
+  }
+  
+  .close-btn:hover {
+    background: white;
+    color: #000;
+  }
+  
+  /* Pixel-perfect rendering */
+  * {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+</style>
+</head>
+<body>
+  <div class="reception-scene">
+    <div class="notepad-clickable" id="notepadClickable"></div>
+  </div>
+
+  <div class="notepad-overlay" id="notepadOverlay">
+    <div class="notepad-container">
+      <button class="close-btn" id="closeBtn">&times;</button>
+      <div class="credential-form">
+        <div class="form-title">Therapist Sign-In</div>
+        <form id="credentialForm">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label for="license">License Number:</label>
+            <input type="text" id="license" name="license" required>
+          </div>
+          <button type="submit" class="submit-btn">Begin Session</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const notepadClickable = document.getElementById('notepadClickable');
+  const notepadOverlay = document.getElementById('notepadOverlay');
+  const closeBtn = document.getElementById('closeBtn');
+  const credentialForm = document.getElementById('credentialForm');
+
+  notepadClickable.addEventListener('click', () => {
+    notepadOverlay.style.display = 'flex';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    notepadOverlay.style.display = 'none';
+  });
+
+  notepadOverlay.addEventListener('click', (e) => {
+    if (e.target === notepadOverlay) {
+      notepadOverlay.style.display = 'none';
+    }
+  });
+
+  credentialForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const license = document.getElementById('license').value;
+    
+    console.log('Credentials submitted:', { username, password, license });
+    alert(`Welcome, Dr. ${username}! Session starting...`);
+    notepadOverlay.style.display = 'none';
+    
+    // Reset form
+    credentialForm.reset();
+  });
+</script>
+</body>
+</html>

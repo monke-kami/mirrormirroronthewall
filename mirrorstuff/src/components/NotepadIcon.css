@@ -1,0 +1,43 @@
+.notepad-icon {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.notepad-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: transform 0.3s ease;
+}
+
+.notepad-icon:hover {
+  transform: scale(1.1);
+}
+
+.notepad-icon:hover .notepad-placeholder {
+  filter: brightness(1.2);
+}
+
+.notepad-icon:active {
+  transform: scale(0.95);
+}
+
+/* For clickable areas (invisible overlay) */
+.notepad-icon.clickable-area {
+  background: rgba(255, 255, 0, 0.1);
+  border: 2px solid rgba(255, 255, 0, 0);
+  border-radius: 4px;
+}
+
+.notepad-icon.clickable-area:hover {
+  background: rgba(255, 255, 0, 0.2);
+  border: 2px solid rgba(255, 255, 0, 0.5);
+}
+
+.notepad-icon.clickable-area .notepad-placeholder {
+  opacity: 0; /* Hide the emoji for invisible clickable areas */
+}
