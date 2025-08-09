@@ -36,34 +36,19 @@ install npm and run using react and vite
 For Software:
 
 # Screenshots (Add at least 3)
-
+![Screenshot 2025-08-09 051147](https://github.com/monke-kami/mirrormirroronthewall/blob/main/Screenshot%202025-08-09%20051147.png)
+![Screenshot 2025-08-09 051206](https://github.com/monke-kami/mirrormirroronthewall/blob/main/Screenshot%202025-08-09%20051206.png)
+![Screenshot 2025-08-09 051252](https://github.com/monke-kami/mirrormirroronthewall/blob/main/Screenshot%202025-08-09%20051252.png)
+![Screenshot 2025-08-09 051319](https://github.com/monke-kami/mirrormirroronthewall/blob/main/Screenshot%202025-08-09%20051319.png)
+![Screenshot 2025-08-09 051351](https://github.com/monke-kami/mirrormirroronthewall/blob/main/Screenshot%202025-08-09%20051351.png)
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
-
-# Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
-
-### Project Demo
-# Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
-
-# Additional Demos
-[Add any extra demo materials/links]
+![ingtt7tx1](https://github.com/user-attachments/assets/5ad2bbc7-9095-4be2-9ad5-f6a9f8aac699)<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" height="700pt" width="1105pt" viewBox="35 47 1113 706" ><defs><style type="text/css">
+           
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- DEVANARYAN B MOHAN: FRONT END
+- AARON THOMAS PHILIP: BACK END 
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
